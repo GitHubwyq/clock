@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @font-face {
+      font-family: "free-font";
+      src: url(./freeFont.ttf);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .text_center {
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    .date {
+      font-family: "free-font";
+      font-size: 7vw;
+      text-shadow: 0 0 8px #fff;
+      color: #fff;
+    }
+
+    .time {
+      font-family: "free-font";
+      font-size: 14vw;
+      text-shadow: 0 0 8px #fff;
+      color: #fff;
+    }
+
+    .colon {
+      margin-left: -7vw;
+    }
+
+    .minute {
+      margin-left: -14vw;
+    }
+
+    .poetry {
+      margin-top: 8vh;
+      font-size: 4vw;
+      font-family: "free-font";
+      text-shadow: 0 0 6px #fff;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="date text_center" id="nowdate"></div>
+    <div class="time text_center">
+      <span class="hours" id="hours"></span>
+      <span class="colon" id="colon"></span>
+      <span class="minute" id="minute"></span>
+    </div>
+    <div class="poetry" id="poem_sentence"></div>
+  </div>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+
+  <script>
+    //页面加载调用
+    window.onload = function () {
+      //每1秒刷新时间
+      setInterval("nowTime()", 1000);
+    }
+
+    function nowTime() {
+      //获取年月日
+      var time = new Date();
+      var year = time.getFullYear();
+      var month = time.getMonth() + 1;
+      var day = time.getDate();
+      // month >= 1 && month <= 9 ? (month = "0" + month) : "";
+      console.log(year,month)
+
+      //获取时分秒
+      var h = time.getHours();
+      var m = time.getMinutes();
+      var s = time.getSeconds();
+
+      //检查是否小于10
+      h = check(h);
+      m = check(m);
+      s = check(s);
+      document.getElementById("nowdate").innerHTML = year + "年" + month + "月" + day + "日";
+      document.getElementById("hours").innerHTML = h
+      document.getElementById("colon").innerHTML = ":"
+      document.getElementById("minute").innerHTML = m
+    }
+    //时间数字小于10，则在之前加个“0”补位。
+    function check(i) {
+      //方法一，用三元运算符
+      var num;
+      i < 10 ? num = "0" + i : num = i;
+      return num;
+
+      //方法二，if语句判断
+      //if(i<10){
+      //    i="0"+i;
+      //}
+      //return i;
+    }
+
+    jinrishici.load(function (result) {
+      // console.log(result.data.content)
+      var sentence = document.querySelector("#poem_sentence")
+      sentence.innerHTML = result.data.content
+
+    });
+
+    
+  </script>
+
+</body>
+
+</html>
